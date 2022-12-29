@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: pod
+metadata:
+  app: webapp
+spec:
+  containers:
+   - name: webapp
+     image: sharukh8686/hello-alpine
+     ports:
+      -  containerPort: 80
+
