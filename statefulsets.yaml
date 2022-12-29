@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fullstackapp
+spec:
+  serviceName: my-service
+  replicas: 2
+  selector:
+    matchLables:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: sharukh8686/hello-alpine
+        ports:
+        - containerPort: 80
+      volumeMounts:
+      - name: mount-vlm
+        mount-path: /data
+  volumeClaimTemplate:
+  - metadata:
+      name: webapp
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: ebs-lb
+      resources:
+        requests: 
+          storage: 1Gi
+  
+--- 
+
+apiVersion: storage.k8s.io/v1
+kind: storageclass
+metadata:
+  name: ebs-lb
+provisioner: kubernetes.io/aws-ebs
+parameter:
+  type: gp2
+  zone: us-west-1a
+
+
+      
